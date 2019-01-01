@@ -50,7 +50,7 @@ const signupEndpoint = (req, res, next) => {
     User.countDocuments({email: email}).exec().then((count) => {
 
         if (count > 0) {
-            res.status(401).json({errors: {email: "Email is already taken."}});
+            res.status(401).json({errors: {email: "A user is already registered with this email address."}});
         }
         else {
 
