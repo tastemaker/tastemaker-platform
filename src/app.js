@@ -1,3 +1,4 @@
+import 'babel-polyfill'; // This needs to come VERY FIRST so ES6 polyfills will be available in ES5 browsers
 
 import express from 'express';
 import passport from 'passport';
