@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist/ && babel ./src --out-dir dist/ --copy-files",
-    "start": "npm run build && NODE_PATH=dist/ node --harmony --use_strict dist/app.js",
+    "start": "npm run build && NODE_PATH=dist/ NODE_CONFIG_DIR=dist/config node --harmony --use_strict dist/app.js",
     "console": "npm run build && NODE_PATH=dist/ node --harmony --use_strict"
   },
   "author": "",
@@ -14,6 +14,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "config": "^3.0.1",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",

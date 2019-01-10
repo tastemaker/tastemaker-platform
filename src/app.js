@@ -6,10 +6,10 @@ import bodyParser from 'body-parser';
 import logger from 'utils/logger';
 import db from 'db';
 import { setupAuthentication, authenticate } from './auth';
+import config from 'config';
 
 
 const app = express();
-const port = 3001;
 
 // Allow CORS requests
 app.options("/*", function(req, res, next){
@@ -37,6 +37,8 @@ setupAuthentication(app);
 app.get('/', (req, res) => res.send('Hello Ladies!'));
 
 app.get('/test', authenticate(), (req, res) => res.send('Sample response!'));
+
+const port = config.get("app.port");
 
 app.listen(port, () => {
     logger.info(`Example app listening on port ${port}!`);
