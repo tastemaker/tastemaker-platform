@@ -1,4 +1,7 @@
 {
+    "app": {
+        "port": "PORT"
+    },
     "db": {
         "uri": "MONGODB_URI"
     }
