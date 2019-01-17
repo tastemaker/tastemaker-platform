@@ -4,5 +4,8 @@
     },
     "db": {
         "uri": "MONGODB_URI"
+    },
+    "jwt": {
+        "secretKey": "JWT_SECRET_KEY"
     }
 }

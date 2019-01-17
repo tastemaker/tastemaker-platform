@@ -1,15 +1,26 @@
 
-import log from 'winston';
+import winston from 'winston';
 
-const logger = log.createLogger({
+const errorStackTracerFormat = winston.format(info => {
+    
+    if (info.meta && info.meta instanceof Error) {
+        info.message = `${info.message} ${info.meta.stack}`;
+    }
+
+    return info;
+});
+
+const logger = winston.createLogger({
     level: 'info',
     transports: [
-        new log.transports.Console({
-            format: log.format.combine(
-                log.format.timestamp(),
-                log.format.colorize({ all: true }),
-                log.format.align(),
-                log.format.printf((info) => {
+        new winston.transports.Console({
+            format: winston.format.combine(
+                winston.format.splat(),
+                errorStackTracerFormat(),
+                winston.format.timestamp(),
+                winston.format.colorize({ all: true }),
+                winston.format.align(),
+                winston.format.printf((info) => {
                     const { timestamp, level, message } = info;
                     return `${timestamp} ${level}: ${message}`;
                 }),

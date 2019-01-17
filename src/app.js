@@ -37,11 +37,12 @@ setupAuthentication(app);
 
 app.get('/', (req, res) => res.send('Hello Ladies!'));
 
-app.get('/test', authenticate(), (req, res) => res.send('Sample response!'));
+// Juan remove
+//app.get('/test', authenticate(), (req, res) => res.send('Sample response!'));
 
 const port = config.get("app.port");
 
 app.listen(port, () => {
-    logger.info(`Example app listening on port ${port}!`);
+    logger.info(`Tastemaker platform listening on port ${port}!`);
 });
 

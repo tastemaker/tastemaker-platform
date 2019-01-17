@@ -6,11 +6,12 @@ import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
 
 import logger from 'utils/logger';
 import User from 'db/models/User';
+import config from 'config';
 
 
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: 'tasmanianDevil' // Juan update
+    secretOrKey: config.get("jwt.secretKey")
 };
 
 const strategy = new JwtStrategy(jwtOptions, (jwtPayload, next) => {
@@ -27,12 +28,12 @@ const loginEndpoint = (req, res) => {
 
     const { email, password } = req.body;
 
-    const user = User.findOne({email: email}).exec().then((user) => {
+    User.findOne({email: email}).exec().then((user) => {
 
         if (user.isValidPassword(password)) {
             const payload = {id: user.id};
             const token = jwt.sign(payload, jwtOptions.secretOrKey);
-            res.json({message: "ok", token: token});
+            res.json({message: "ok", token: token, user: { email: user.email, id: user.id }});
         }
         else {
             res.status(401).json({message:"passwords did not match"});
@@ -54,13 +55,13 @@ const signupEndpoint = (req, res, next) => {
         }
         else {
 
-            const user = User.register({
+            User.register({
                 email: email,
                 password: password
             }).then(user => {
                 const payload = {id: user.id};
                 const token = jwt.sign(payload, jwtOptions.secretOrKey);
-                res.json({message: "ok", token: token});
+                res.json({message: "ok", token: token, user: { email: user.email, id: user.id }});
             }).catch(validation => {
 
                 const cleanedErrors = {};
@@ -68,8 +69,7 @@ const signupEndpoint = (req, res, next) => {
                     cleanedErrors[field] = validation.errors[field].message;
                 }
 
-                logger.error(validation);
-                logger.error(`Failed to register user ${email}: ${JSON.stringify(cleanedErrors)}`);
+                logger.error(`Failed to register user ${email}: ${JSON.stringify(cleanedErrors)}`, validation);
                 res.status(401).json({errors: cleanedErrors});
             });
         }
